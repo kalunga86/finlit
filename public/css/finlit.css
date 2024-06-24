@@ -1,0 +1,57 @@
+/* finlit.css */
+
+/* width */
+::-webkit-scrollbar {
+	width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+	background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+	background: #888;
+	border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+	background: #555;
+}
+
+body {
+    font-family: Figtree, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+.dropdown-menu {
+    display: none;
+}
+
+.dropdown-menu.show {
+    display: block;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+      display: block;
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+      max-width: 300px; /* maximum width to ensure it doesn't cover too much on very small screens */
+      transform: translateX(300px);
+      transition: transform 0.3s ease-in-out;
+  }
+  .sidebar.open {
+      transform: translateX(0);
+  }
+  .main-content {
+      transition: transform 0.3s ease-in-out;
+  }
+  .main-content.shifted {
+      transform: translateX(-300px); /* Shift the content to the left by the width of the sidebar */
+  }
+}
