@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table) {
-            $table->id();
+        Schema::create('wallets', function (Blueprint $table) {
+            $table->id();            
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('category_name')->nullable();
-            $table->longText('icon')->nullable();
-            $table->enum('type', ['payment', 'expense']);
-            $table->text('description')->nullable();
+            $table->decimal('amount', 8, 2);
+            $table->date('date_from');
+            $table->date('date_to');
             $table->timestamps();
         });
     }
@@ -27,13 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('wallets');
     }
 };
-
-
-
-
-
-
-

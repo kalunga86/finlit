@@ -8,6 +8,7 @@ use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\VendorController;
+use App\Http\Controllers\WalletController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -68,6 +69,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/vendors/{id}/edit', VendorController::class .'@edit')->name('vendors.edit');
     Route::put('/vendors/{id}', VendorController::class .'@update')->name('vendors.update');
     Route::delete('/vendors/{id}', VendorController::class .'@destroy')->name('vendors.destroy');
+
+    Route::get('/wallets', WalletController::class .'@index')->name('wallets');
+    Route::get('/wallets/new', WalletController::class . '@new')->name('wallets.new');
+    Route::post('/wallets', WalletController::class .'@store')->name('wallets.store');
+    Route::get('/wallets/{id}', WalletController::class .'@show')->name('wallets.show');
+    Route::get('/wallets/{id}/edit', WalletController::class .'@edit')->name('wallets.edit');
+    Route::put('/wallets/{id}', WalletController::class .'@update')->name('wallets.update');
+    Route::delete('/wallets/{id}', WalletController::class .'@destroy')->name('wallets.destroy');
 });
 
 require __DIR__.'/auth.php';

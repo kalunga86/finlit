@@ -162,7 +162,7 @@
                         
                         <!-- Icon Button Section -->
                         <div class="flex items-center justify-end">
-                        <a href="#" class="flex items-center justify-center w-10 h-10 rounded border-2 border-gray-200 border-dashed dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+                        <a href="{{ route('wallets.new') }}" class="flex items-center justify-center w-10 h-10 rounded border-2 border-gray-200 border-dashed dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
                             <svg class="w-4 h-4 text-gray-400 dark:text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
                             </svg>
@@ -170,7 +170,23 @@
                         </div>
                     </div>
                     <ul class="space-y-4 font-medium">
-                        <li>
+                        @foreach ($wallets as $wallet)
+                            <li>
+                                <a href="#" class="flex items-center p-4 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                                    <div class="bg-blue-500 p-2 rounded-lg">
+                                        <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
+                                            <path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z" />
+                                            <path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z" />
+                                        </svg>
+                                    </div>
+                                    <div class="ml-3">
+                                        <div class="text-base font-semibold">Home Wallet</div>
+                                        <div class="text-sm text-gray-500">$ {{ $wallet->amount }}</div>
+                                    </div>
+                                </a>
+                            </li>
+                        @endforeach
+                        <!-- <li>
                             <a href="#" class="flex items-center p-4 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
                                 <div class="bg-blue-500 p-2 rounded-lg">
                                     <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
@@ -198,7 +214,7 @@
                                     <div class="text-sm text-gray-500">$875,000</div>
                                 </div>
                             </a>
-                        </li>
+                        </li> -->
                     </ul>
                     
                     <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700">
@@ -222,11 +238,9 @@
                         @foreach ($categories as $category)
                             <li>
                                 <a href="#" class="flex items-center p-4 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-                                    <div class="bg-red-500 p-2 rounded-lg">
-                                        <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                            <path
-                                                d="m17.418 3.623-.018-.008a6.713 6.713 0 0 0-2.4-.569V2h1a1 1 0 1 0 0-2h-2a1 1 0 0 0-1 1v2H9.89A6.977 6.977 0 0 1 12 8v5h-2V8A5 5 0 1 0 0 8v6a1 1 0 0 0 1 1h8v4a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-4h6a1 1 0 0 0 1-1V8a5 5 0 0 0-2.582-4.377ZM6 12H4a1 1 0 0 1 0-2h2a1 1 0 0 1 0 2Z"
-                                            />
+                                    <div class="bg-{{ $category->color }} p-2 rounded-lg">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-white">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="{{ $category->icon }}"/>
                                         </svg>
                                     </div>
                                     <div class="ml-3">
