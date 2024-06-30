@@ -22,7 +22,18 @@ document.addEventListener('DOMContentLoaded', function () {
             fill: true,
             data: monthlyExpenses,
             maxBarThickness: 6
-        }]
+        },{
+          label: 'Payments',
+          tension: 0.4,
+          borderWidth: 0,
+          pointRadius: 0,
+          borderColor: "#ff6384",
+          backgroundColor: gradientStroke1,
+          borderWidth: 3,
+          fill: true,
+          data: monthlyPayments,
+          maxBarThickness: 6
+      }]
     };
 
     const config = {
@@ -102,6 +113,8 @@ document.addEventListener('DOMContentLoaded', function () {
             backgroundColor: ['#FF6384', '#36A2EB'],
             // borderColor: ['rgb(255, 99, 132)', 'rgb(54, 162, 235)'],
             data: budgetData,
+            // borderWidth: 1,
+            borderRadius: 10
         }]
     };
     
@@ -109,6 +122,7 @@ document.addEventListener('DOMContentLoaded', function () {
         type: 'doughnut',
         data: data,
         options: {
+            cutout: '80%',
             responsive: true,
             plugins: {
                 legend: {

@@ -17,7 +17,7 @@
                 </div>
                 <div class="flex-auto">
                     <div class="chart-container">
-                        <canvas id="expensesGraph" height="300" width="520" style="display: block; box-sizing: border-box; height: 300px; width: 520.9px;"></canvas>
+                        <canvas id="expensesGraph" height="300" width="520" style="display: block; box-sizing: border-box; height: 300px; width: 100%;"></canvas>
                     </div>
                 </div>
             </div>
@@ -53,6 +53,7 @@
 <script>
     var budgetData = @json([$currentMonthExpense, $remainingBudget]);
     var monthlyExpenses = @json($monthlyExpenses);
+    var monthlyPayments = @json($monthlyPayments);
 </script>
 <!-- Include the external JavaScript file -->
 <script src="{{ asset('js/charts.js') }}"></script>

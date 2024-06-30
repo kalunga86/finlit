@@ -15,7 +15,9 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        $payments = Payment::with('client')->get();
+        // $payments = Payment::with('client')->paginate(4);
+
+        $payments = Payment::with('client')->orderBy('created_at', 'desc')->paginate(4);
 
         return view('payments.index', compact('payments'));
     }
@@ -105,6 +107,6 @@ class PaymentController extends Controller
         
         $payment->delete();
         
-        return redirect()->route('payment')->with('success', 'Payment deleted successfully!');
+        return redirect()->route('payments')->with('success', 'Payment deleted successfully!');
     }
 }

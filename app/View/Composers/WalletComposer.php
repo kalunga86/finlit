@@ -2,16 +2,22 @@
  
 namespace App\View\Composers;
 
+use App\Contracts\FetchWalletsForUserContract;
 use Illuminate\View\View;
 use App\Models\Wallet;
  
 class WalletComposer
 {
+    protected $query;
+
     /**
-     * Create a new wallet composer.
+     * WalletComposer constructor.
+     *
+     * @param FetchWalletsForUserContract $fetchWalletsForUser
      */
-    public function __construct() {
-        // 
+    public function __construct(FetchWalletsForUserContract $fetchWalletsForUser)
+    {
+        $this->query = $fetchWalletsForUser;
     }
  
     /**
@@ -19,7 +25,10 @@ class WalletComposer
      */
     public function compose(View $view): void
     {
-        $wallets = Wallet::limit(2)->get();
+        $wallets = $this->query->handle(
+            user: auth()->id(),
+        );
+
         $view->with('wallets', $wallets);
     }
 }

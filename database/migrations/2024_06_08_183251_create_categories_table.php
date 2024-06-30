@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('category_name')->nullable();
             $table->longText('icon')->nullable();
+            $table->string('color')->nullable();
             $table->enum('type', ['payment', 'expense']);
             $table->text('description')->nullable();
             $table->timestamps();

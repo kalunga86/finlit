@@ -2,18 +2,33 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\FetchWalletsForUserContract;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Wallet;
 
 class WalletController extends Controller
 {
+    protected $query;
+    
+    /**
+     * WalletController constructor.
+     *
+     * @param FetchWalletsForUserContract $fetchWalletsForUser
+     */
+    public function __construct(FetchWalletsForUserContract $fetchWalletsForUser)
+    {
+        $this->query = $fetchWalletsForUser;
+    }
+    
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $wallets = Wallet::get();
+        $wallets = $this->query->handle(
+            user: auth()->id(),
+        );
 
         return view('wallets.index', compact('wallets'));
     }
@@ -72,9 +87,9 @@ class WalletController extends Controller
             'date_to' => 'required|string|max:255',
         ]);
 
-        $wallet = Expense::find($wallet_id);
+        $wallet = Wallet::find($wallet_id);
 
-        Wallet::update([
+        $wallet->update([
             'user_id' => Auth::id(),
             'amount' => $request->amount,
             'date_from' => $request->date_from,

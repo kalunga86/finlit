@@ -32,22 +32,24 @@
                             </th>
                         </tr>
                     </thead>
+
+                    @if (count($wallets) > 0)
                     <tbody>
                         @foreach($wallets as $wallet)
                             <tr class="bg-white dark:bg-gray-800">
                                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    {{ $wallet->amount }}
+                                    {{ $wallet['amount'] }}
                                 </th>
                                 <td class="px-6 py-4">
-                                    {{ $wallet->amount }}
+                                    {{ $wallet['date_from'] }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    {{ $wallet->date }}
+                                    {{ $wallet['date_to'] }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    <a href="{{ route('wallets.edit', $wallet->id) }}">Edit</a>
+                                    <a href="{{ route('wallets.edit', $wallet['id']) }}">Edit</a>
 
-                                    <form action="{{ route('wallets.destroy', $wallet->id) }}" method="post">
+                                    <form action="{{ route('wallets.destroy', $wallet['id']) }}" method="post">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger btn-sm">Delete</button>
@@ -55,6 +57,10 @@
                                 </td>
                             </tr>
                         @endforeach
+
+                        @else
+                            <p class="p-4">You have no Wallets.</p>
+                        @endif 
                     </tbody>
                 </table>
             </div>

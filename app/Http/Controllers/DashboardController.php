@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Models\Category;
 use App\Models\Expense;
+use App\Models\Payment;
 use App\Models\Wallet;
 
 use Illuminate\Http\Request;
@@ -14,6 +15,10 @@ class DashboardController extends Controller
     public function index() {
 
         $categories = $this->getCategoriesWithMonthlyExpense();
+
+        // $monthlyPayments = [3500, 6000, 10000, 8000, 15000, 5000, 0, 0, 0, 0, 0, 0];
+
+        $monthlyPayments = $this->getMonthlyPayments();
         
         $monthlyExpenses = $this->getMonthlyExpenses();
 
@@ -23,8 +28,29 @@ class DashboardController extends Controller
 
         $remainingBudget = $currentMonthBudget - $currentMonthExpense;
 
-        return view('dashboard.index', compact('monthlyExpenses', 'categories', 'currentMonthBudget', 'currentMonthExpense', 'remainingBudget'));
+        return view('dashboard.index', compact('monthlyPayments', 'monthlyExpenses', 'categories', 'currentMonthBudget', 'currentMonthExpense', 'remainingBudget'));
 
+    }
+
+    public function getMonthlyPayments() 
+    {
+        // Get the total expenses for each month
+        $monthlyPayments = Payment::select(
+            DB::raw('SUM(amount) as total'),
+            DB::raw('MONTH(date) as month')
+        )
+        ->groupBy(DB::raw('MONTH(date)'))
+            ->get();
+
+        // Initialize an array to store the totals for each month
+        $paymentsByMonth = array_fill(0, 12, 0);
+
+        // Populate the array with the totals from the query
+        foreach ($monthlyPayments as $payment) {
+            $paymentsByMonth[$payment->month - 1] = $payment->total;
+        }
+
+        return $paymentsByMonth;
     }
 
     public function getMonthlyExpenses()

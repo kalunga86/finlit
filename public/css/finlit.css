@@ -55,3 +55,14 @@ body {
       transform: translateX(-300px); /* Shift the content to the left by the width of the sidebar */
   }
 }
+
+/* DataTables Css */
+table.dataTable,
+table.dataTable th,
+table.dataTable td {
+    border: none !important;
+}
+
+.custom-pagination nav p {
+    display: none !important;
+}

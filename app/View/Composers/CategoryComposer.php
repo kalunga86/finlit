@@ -19,7 +19,7 @@ class CategoryComposer
      */
     public function compose(View $view): void
     {
-        $categories = Category::limit(4)->get();
+        $categories = Category::query()->where('user_id', auth()->id())->limit(4)->get();
         $view->with('categories', $categories);
     }
 }
