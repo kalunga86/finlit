@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('category_name')->nullable();
+            $table->string('category_name')->unique();
             $table->longText('icon')->nullable();
-            $table->string('color')->nullable();
+            $table->string('color')->nullable()->default('blue-500');
             $table->enum('type', ['payment', 'expense']);
             $table->text('description')->nullable();
+            $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamps();
         });
     }
@@ -28,6 +28,11 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('categories', function (Blueprint $table) {
+            $table->dropForeign(['updated_by']);
+            $table->dropColumn('updated_by');
+        });
+
         Schema::dropIfExists('categories');
     }
 };

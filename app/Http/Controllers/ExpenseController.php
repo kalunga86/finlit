@@ -15,7 +15,10 @@ class ExpenseController extends Controller
      */
     public function index()
     {
-        $expenses = Expense::with('category')->orderBy('created_at', 'desc')->paginate(4);
+        $expenses = Expense::with('category')
+            ->where('user_id', auth()->id())
+            ->orderBy('created_at', 'desc')
+            ->paginate(4);
 
         return view('expenses.index', compact('expenses'));
     }

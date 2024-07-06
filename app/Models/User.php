@@ -6,10 +6,13 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Activitylog\Models\Activity;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, LogsActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -45,6 +48,26 @@ class User extends Authenticatable
         ];
     }
 
+    /**
+     * Get the options for logging activity.
+     *
+     * @return \Spatie\Activitylog\LogOptions
+     */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['*'])
+            ->useLogName('User')
+            ->setDescriptionForEvent(fn(string $eventName) => "User has been {$eventName}")
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'category_user');
+    }
+
     public function payments()
     {
         return $this->hasMany(Payment::class);
@@ -63,6 +86,11 @@ class User extends Authenticatable
     public function clients()
     {
         return $this->hasMany(Client::class);
+    }
+
+    public function activities()
+    {
+        return $this->hasMany(Activity::class, 'causer_id');
     }
 
     public function vendors()

@@ -33,14 +33,15 @@ class CategoryController extends Controller
             'description' => 'nullable|string',
         ]);
 
-        Category::create([
-            'user_id' => Auth::id(), // Associate the client with the authenticated user
+        $category = Category::firstOrCreate([
             'category_name' => $request->category_name,
             'type' => $request->type,
             'description' => $request->description,
         ]);
-        
-        // $category = Category::create($request->all());
+
+        if (!$request->user()->categories()->where('categories.id', $category->id)->exists()) {
+            $request->user()->categories()->attach($category);
+        }
         
         return redirect()->route('categories')->with('success', 'Category added successfully!');
     }
@@ -71,9 +72,16 @@ class CategoryController extends Controller
             'description' => 'nullable|string',
         ]);
 
-        $category = Category::find($category_id);
+        $category = Category::findOrFail($category_id);
 
-        $category->update($request->all());
+        $category->update([
+            'category_name' => $request->category_name,
+            'type' => $request->type,
+            'description' => $request->description,
+            'updated_by' => Auth::id(),
+        ]);
+
+        // $category->update($request->all());
 
         return redirect()->route('categories')->with('success', 'Category updated successfully.');
     }

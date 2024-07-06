@@ -8,7 +8,7 @@
     <div class="content">
         <div class="overflow-hidden mb-4">
             <div class="flex justify-between items-center">
-                <h2 class="text-xl font-bold">Client List</h2>
+                <h2 class="text-xl font-bold">Vendor List</h2>
                 <a href="{{ route('vendors.new') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                     Add Vendor
                 </a>

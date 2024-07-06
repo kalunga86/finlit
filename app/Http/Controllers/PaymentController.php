@@ -17,7 +17,10 @@ class PaymentController extends Controller
     {
         // $payments = Payment::with('client')->paginate(4);
 
-        $payments = Payment::with('client')->orderBy('created_at', 'desc')->paginate(4);
+        $payments = Payment::with('client')
+            ->where('user_id', auth()->id())    
+            ->orderBy('created_at', 'desc')
+            ->paginate(4);
 
         return view('payments.index', compact('payments'));
     }

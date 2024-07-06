@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Models\Category;
@@ -15,8 +16,6 @@ class DashboardController extends Controller
     public function index() {
 
         $categories = $this->getCategoriesWithMonthlyExpense();
-
-        // $monthlyPayments = [3500, 6000, 10000, 8000, 15000, 5000, 0, 0, 0, 0, 0, 0];
 
         $monthlyPayments = $this->getMonthlyPayments();
         
@@ -39,6 +38,7 @@ class DashboardController extends Controller
             DB::raw('SUM(amount) as total'),
             DB::raw('MONTH(date) as month')
         )
+        ->where('user_id', auth()->id())
         ->groupBy(DB::raw('MONTH(date)'))
             ->get();
 
@@ -60,6 +60,7 @@ class DashboardController extends Controller
                 DB::raw('SUM(amount) as total'),
                 DB::raw('MONTH(date) as month')
             )
+            ->where('user_id', auth()->id())
             ->groupBy(DB::raw('MONTH(date)'))
             ->get();
     
@@ -80,6 +81,7 @@ class DashboardController extends Controller
 
         $currentMonthExpenses = DB::table('expenses')
             ->whereMonth('date', $currentMonth)
+            ->where('user_id', auth()->id())
             ->sum('amount');
 
         return $currentMonthExpenses;
@@ -91,6 +93,7 @@ class DashboardController extends Controller
 
         $currentMonthBudget = DB::table('wallets')
             ->whereMonth('date_to', $currentMonth)
+            ->where('user_id', auth()->id())
             ->sum('amount');
 
         return $currentMonthBudget;
@@ -99,13 +102,15 @@ class DashboardController extends Controller
     public function getCategoriesWithMonthlyExpense()
     {
         $currentMonth = date('m');
-    
+        $userId = auth()->id();
+        
         $categories = DB::table('categories')
-            ->leftJoin('expenses', function ($join) use ($currentMonth) {
+            ->leftJoin('expenses', function ($join) use ($currentMonth, $userId) {
                 $join->on('expenses.category_id', '=', 'categories.id')
-                    ->whereRaw('MONTH(expenses.date) = ?', [$currentMonth]);
+                    ->whereRaw('MONTH(expenses.date) = ?', [$currentMonth])
+                    ->where('expenses.user_id', $userId);
             })
-            ->where('categories.type', 'expense') // Filter categories by type 'expense'
+            ->where('categories.type', 'expense')
             ->groupBy('categories.category_name', 'categories.icon', 'categories.color')
             ->selectRaw('categories.category_name, categories.icon, categories.color, COALESCE(SUM(expenses.amount), 0) AS total_expenses')
             ->orderByDesc('total_expenses')
@@ -113,5 +118,5 @@ class DashboardController extends Controller
             ->get();
         
         return $categories;
-    }
+    }    
 }

@@ -13,7 +13,7 @@ class ClientController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Client::query();
+        $query = Client::query()->where('user_id', auth()->id());
 
         if ($search = $request->input('search')) {
             $query->where('name', 'like', "%{$search}%")
@@ -43,13 +43,11 @@ class ClientController extends Controller
         ]);
 
         Client::create([
-            'user_id' => Auth::id(), // Associate the client with the authenticated user
+            'user_id' => Auth::id(),
             'name' => $request->name,
             'email' => $request->email,
             'phone_number' => $request->phone_number,
         ]);
-        
-        // $client = Client::create($request->all());
         
         return redirect()->route('clients')->with('success', 'Client added successfully!');
     }

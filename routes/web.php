@@ -5,6 +5,7 @@ use App\Http\Controllers\BillController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\LogController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\VendorController;
@@ -53,6 +54,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/expenses/{id}/edit', ExpenseController::class .'@edit')->name('expenses.edit');
     Route::put('/expenses/{id}', ExpenseController::class .'@update')->name('expenses.update');
     Route::delete('/expenses/{id}', ExpenseController::class .'@destroy')->name('expenses.destroy');
+
+    Route::get('/logs', LogController::class .'@index')->name('logs');
+    Route::get('/logs/{id}', LogController::class .'@show')->name('logs.show');
 
     Route::get('/payments', PaymentController::class .'@index')->name('payments');
     Route::get('/payments/new', PaymentController::class . '@new')->name('payments.new');

@@ -13,7 +13,7 @@ class VendorController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Vendor::query();
+        $query = Vendor::query()->where('user_id', auth()->id());
 
         if ($search = $request->input('search')) {
             $query->where('name', 'like', "%{$search}%")

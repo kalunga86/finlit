@@ -17,7 +17,7 @@
                 </div>
                 <div class="flex-auto">
                     <div class="chart-container">
-                        <canvas id="expensesGraph" height="300" width="520" style="display: block; box-sizing: border-box; height: 300px; width: 100%;"></canvas>
+                        <canvas id="expensesGraph" height="320" width="520" style="display: block; box-sizing: border-box; height: 300px; width: 100%;"></canvas>
                     </div>
                 </div>
             </div>

@@ -2,33 +2,55 @@
  
 namespace App\View\Composers;
 
-use App\Contracts\FetchWalletsForUserContract;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\DB;
 use App\Models\Wallet;
  
 class WalletComposer
 {
-    protected $query;
-
     /**
-     * WalletComposer constructor.
-     *
-     * @param FetchWalletsForUserContract $fetchWalletsForUser
+     * Create a new category composer.
      */
-    public function __construct(FetchWalletsForUserContract $fetchWalletsForUser)
-    {
-        $this->query = $fetchWalletsForUser;
+    public function __construct() {
+        // 
     }
  
     /**
      * Bind data to the view.
      */
+
     public function compose(View $view): void
     {
-        $wallets = $this->query->handle(
-            user: auth()->id(),
-        );
+        $currentMonth = date('m');
+        $currentYear = date('Y');
 
-        $view->with('wallets', $wallets);
+        $currentMonthExpenses = DB::table('expenses')
+            ->whereMonth('date', $currentMonth)
+            ->whereYear('date', $currentYear)
+            ->where('user_id', auth()->id())
+            ->sum('amount');
+        
+        $currentMonthWallet = DB::table('wallets')
+            ->whereMonth('date_from', $currentMonth)
+            ->whereYear('date_from', $currentYear)
+            ->where('user_id', auth()->id())
+            ->sum('amount');
+
+        $walletBalance = $currentMonthWallet - $currentMonthExpenses;
+
+        $view->with('walletBalance', $walletBalance);
+    }
+
+
+    public function getCurrentMonthExpense() {
+        
+        $currentMonth = date('m');
+
+        $currentMonthExpenses = DB::table('expenses')
+            ->whereMonth('date', $currentMonth)
+            ->where('user_id', auth()->id())
+            ->sum('amount');
+
+        return $currentMonthExpenses;
     }
 }
